@@ -22,6 +22,7 @@
         "drupal/core-project-message": "^11.3",
         "drupal/core-recipe-unpack": "^11.3",
         "drupal/core-recommended": "^11.3",
+        "drupal/gin": "^5.0",
         "drupal/gin_login": "^2.1",
         "drupal/gin_toolbar": "^3.0",
         "drupal/klaro": "^3.0",
@@ -56,6 +57,10 @@
         "drupal-scaffold": {
             "locations": {
                 "web-root": "web/"
+            },
+            "file-mapping": {
+                "[web-root]/sites/development.services.yml": "assets/scaffold/development.services.yml",
+                "[web-root]/.htaccess": false
             }
         },
         "installer-paths": {
