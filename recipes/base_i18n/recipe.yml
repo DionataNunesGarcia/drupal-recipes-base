@@ -1,0 +1,32 @@
+name: "Base i18n"
+description: "Infraestrutura multilíngue do Drupal"
+type: "Site"
+
+install:
+  - language
+  - locale
+  - content_translation
+  - config_translation
+
+config:
+  actions:
+    #
+    # ========================================================
+    # ENABLE MULTILINGUAL SYSTEM
+    # ========================================================
+    #
+    language.types:
+      simple_config_update:
+        all:
+          configurable: true
+
+    #
+    # ========================================================
+    # TRANSLATION SETTINGS
+    # ========================================================
+    #
+    locale.settings:
+      simple_config_update:
+        translation:
+          use_source: local
+        cache_strings: true
