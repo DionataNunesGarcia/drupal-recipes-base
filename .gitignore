@@ -1,0 +1,97 @@
+# --------------------------------------------------
+# 📦 Dependencies (Composer / Node)
+# --------------------------------------------------
+
+/vendor/
+/node_modules/
+
+/web/core/
+/web/modules/contrib/
+/web/themes/contrib/
+/web/profiles/contrib/
+/web/libraries/
+/web/profiles/
+
+# Custom theme build output (example)
+/web/themes/custom/hsl/public
+
+# --------------------------------------------------
+# 🧶 Yarn (keep required files only)
+# --------------------------------------------------
+
+.yarn/*
+!.yarn/cache
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.yarn/install-state.gz
+
+# --------------------------------------------------
+# 🎨 Frontend build artifacts
+# --------------------------------------------------
+
+docroot/themes/custom/*/public/**
+/web/themes/custom/front_theme/dist/css/style.pre.css
+
+# --------------------------------------------------
+# 📂 Drupal files (user-generated content)
+# --------------------------------------------------
+
+/web/sites/*/files/*
+
+# --------------------------------------------------
+# ⚙️ Environment & local configuration
+# --------------------------------------------------
+
+.env
+/web/sites/*/settings.local.php
+/web/sites/default/settings.ddev.php
+
+# Keep default settings file
+!/web/sites/default/settings.php
+
+# DDEV local overrides
+.ddev/config.local.yaml
+
+# --------------------------------------------------
+# 🧪 Testing & reports
+# --------------------------------------------------
+
+test-results/
+playwright-report/
+playwright/.cache/
+
+# --------------------------------------------------
+# 🛠️ Development tools & IDEs
+# --------------------------------------------------
+
+/.idea/
+/.vscode/
+!.github/
+
+# --------------------------------------------------
+# 📄 Logs, backups & temporary files
+# --------------------------------------------------
+
+*.log
+*.sql
+*.sql.gz
+*.tgz
+*.zip
+.DS_Store
+
+# Keep database assets if needed
+!assets/db/*
+
+# --------------------------------------------------
+# 🔧 Drush & misc
+# --------------------------------------------------
+
+/drush/contrib/
+
+# --------------------------------------------------
+# 🚫 Recipes (optional)
+# Uncomment if recipes should NOT be versioned
+# --------------------------------------------------
+# /recipes/
