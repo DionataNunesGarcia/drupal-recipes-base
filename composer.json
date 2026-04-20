@@ -22,16 +22,21 @@
         "drupal/core-project-message": "^11.3",
         "drupal/core-recipe-unpack": "^11.3",
         "drupal/core-recommended": "^11.3",
+        "drupal/gin": "^5.0",
         "drupal/gin_login": "^2.1",
         "drupal/gin_toolbar": "^3.0",
+        "drupal/google_analytics": "^4.0",
         "drupal/klaro": "^3.0",
         "drupal/metatag": "^2.2",
         "drupal/paragraphs": "^1.20",
         "drupal/pathauto": "^1.14",
         "drupal/recaptcha_v3": "^2.0",
         "drupal/redirect": "^1.12",
+        "drupal/robotstxt": "^1.6",
+        "drupal/schema_metatag": "^3.0",
         "drupal/simple_sitemap": "^4.2",
         "drupal/token": "^1.17",
+        "drupal/twig_tweak": "^3.4",
         "drush/drush": "^13.7"
     },
     "conflict": {
@@ -56,6 +61,10 @@
         "drupal-scaffold": {
             "locations": {
                 "web-root": "web/"
+            },
+            "file-mapping": {
+                "[web-root]/sites/development.services.yml": "assets/scaffold/development.services.yml",
+                "[web-root]/.htaccess": false
             }
         },
         "installer-paths": {
