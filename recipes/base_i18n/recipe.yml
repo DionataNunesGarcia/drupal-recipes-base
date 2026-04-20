@@ -7,24 +7,10 @@ install:
   - locale
   - content_translation
   - config_translation
+  - base_i18n
 
 config:
   actions:
-    #
-    # ========================================================
-    # ENABLE MULTILINGUAL SYSTEM
-    # ========================================================
-    #
-    language.types:
-      simple_config_update:
-        all:
-          configurable: true
-
-    #
-    # ========================================================
-    # TRANSLATION SETTINGS
-    # ========================================================
-    #
     locale.settings:
       simple_config_update:
         translation:

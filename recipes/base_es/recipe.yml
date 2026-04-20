@@ -2,8 +2,11 @@ name: "Base ES"
 description: "Configura espanhol como idioma padrão"
 type: "Site"
 
-install:
+recipes:
   - base_i18n
+
+install:
+  - base_lang_single
 
 config:
   actions:

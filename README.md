@@ -23,6 +23,9 @@ The project is organized around reusable **Drupal Recipes**, each responsible fo
 recipes/
   base_core/
   base_admin/
+  base_i18n/
+  base_pt_br/
+  base_es/
   base_seo/
   base_paragraphs/
   base_theme/
@@ -31,14 +34,17 @@ recipes/
 
 ### Recipe Overview
 
-| Recipe            | Responsibility                                      |
-| ----------------- | --------------------------------------------------- |
-| `base_core`       | Core Drupal setup (content, media, views, etc.)     |
-| `base_admin`      | Admin UI and developer experience                   |
-| `base_seo`        | SEO tools (metatag, sitemap, redirects)             |
-| `base_paragraphs` | Paragraphs and structured content                   |
-| `base_theme`      | Theme setup and frontend pipeline                   |
-| `base_finish`     | Final production features (cookies, security, etc.) |
+| Recipe            | Responsibility                                              |
+| ----------------- | ----------------------------------------------------------- |
+| `base_core`       | Core Drupal setup (content, media, views, etc.)             |
+| `base_admin`      | Admin UI and developer experience (Gin, toolbar)            |
+| `base_i18n`       | Multilingual infrastructure (language, locale, translation) |
+| `base_pt_br`      | PT-BR as the only language, removes others                  |
+| `base_es`         | Spanish as the only language, removes others                |
+| `base_seo`        | SEO tools (metatag, sitemap, redirects, robots.txt)         |
+| `base_paragraphs` | Paragraphs and structured content                           |
+| `base_theme`      | Theme setup and frontend pipeline                           |
+| `base_finish`     | Final production features (cookies, security, etc.)         |
 
 ---
 
@@ -60,15 +66,11 @@ git clone <your-repo-url>
 cd <project-folder>
 ```
 
----
-
 ### 2. Start DDEV
 
 ```bash
 ddev start
 ```
-
----
 
 ### 3. Install dependencies
 
@@ -78,18 +80,48 @@ ddev composer install
 
 ---
 
-### 4. Install Drupal
+## 🚀 Quick Start
+
+### Multilingual (PT-BR + ES + EN)
 
 ```bash
-ddev drush si minimal -y
+ddev drush sql-drop -y
+ddev drush si standard -y
+ddev drush recipe ../recipes/base_admin
+ddev drush recipe ../recipes/base_i18n
+ddev drush recipe ../recipes/base_seo
+ddev drush locale-update --langcode=pt-br
+ddev drush locale-update --langcode=es
+ddev drush cr
+ddev drush uli
 ```
 
----
-
-### 5. Access the project
+### Single language — PT-BR only
 
 ```bash
-ddev launch
+ddev drush sql-drop -y
+ddev drush si standard -y
+ddev drush recipe ../recipes/base_admin
+ddev drush recipe ../recipes/base_i18n
+ddev drush recipe ../recipes/base_pt_br
+ddev drush recipe ../recipes/base_seo
+ddev drush locale-update --langcode=pt-br
+ddev drush cr
+ddev drush uli
+```
+
+### Single language — ES only
+
+```bash
+ddev drush sql-drop -y
+ddev drush si standard -y
+ddev drush recipe ../recipes/base_admin
+ddev drush recipe ../recipes/base_i18n
+ddev drush recipe ../recipes/base_es
+ddev drush recipe ../recipes/base_seo
+ddev drush locale-update --langcode=es
+ddev drush cr
+ddev drush uli
 ```
 
 ---
@@ -99,17 +131,31 @@ ddev launch
 Apply recipes individually depending on your project needs:
 
 ```bash
-ddev drush recipe web/recipes/base_core
-ddev drush recipe web/recipes/base_admin
-ddev drush recipe web/recipes/base_seo
-ddev drush recipe web/recipes/base_paragraphs
-ddev drush recipe web/recipes/base_theme
-ddev drush recipe web/recipes/base_finish
+ddev drush recipe ../recipes/base_core
+ddev drush recipe ../recipes/base_admin
+ddev drush recipe ../recipes/base_i18n
+ddev drush recipe ../recipes/base_seo
+ddev drush recipe ../recipes/base_paragraphs
+ddev drush recipe ../recipes/base_theme
+ddev drush recipe ../recipes/base_finish
 ```
+
+> ⚠️ `simple_sitemap` must be installed before applying `base_seo`:
+>
+> ```bash
+> ddev drush en simple_sitemap -y
+> ddev drush recipe ../recipes/base_seo
+> ```
 
 ---
 
 ## 🔁 Development Workflow
+
+### Reset and reinstall from scratch
+
+```bash
+ddev drush sql-drop -y && ddev drush si standard -y
+```
 
 ### Export configuration
 
@@ -117,13 +163,17 @@ ddev drush recipe web/recipes/base_finish
 ddev drush cex
 ```
 
----
-
-### Test from scratch (recommended)
+### Rebuild cache
 
 ```bash
-ddev drush si -y
-ddev drush recipe web/recipes/base_core
+ddev drush cr
+```
+
+### Update translations
+
+```bash
+ddev drush locale-update --langcode=pt-br
+ddev drush locale-update --langcode=es
 ```
 
 ---
@@ -155,15 +205,21 @@ npm install
 - Recipes should be **independent and reusable**
 - Avoid exporting unnecessary configuration
 - Always test recipes on a **fresh Drupal install**
-- Some contributed modules may not yet support Drupal 11
+- Some contributed modules may not yet fully support Drupal 11
+- `simple_sitemap` must be installed separately before `base_seo` due to entity initialization timing
+- `locale-update` requires internet access to fetch `.po` files from drupal.org
 
 ---
 
 ## 📌 Roadmap
 
-- [ ] Create base recipes
-- [ ] Extract reusable configurations
-- [ ] Add feature recipes (blog, courses, pages)
+- [x] Base admin recipe (Gin theme)
+- [x] Base i18n recipe (multilingual infrastructure)
+- [x] Base SEO recipe (metatag, sitemap, redirects)
+- [ ] Base paragraphs recipe
+- [ ] Base theme recipe
+- [ ] Base finish recipe
+- [ ] Feature recipes (blog, courses, landing pages)
 - [ ] Improve frontend tooling
 
 ---
