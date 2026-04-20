@@ -1,6 +1,18 @@
+// Tokens
+@use "tokens/colors";
+@use "tokens/typography";
+@use "tokens/spacing";
+@use "tokens/effects";
 
+// Base
+@use "base/fonts";
+@use "base/reset";
+@use "base/headings";
 
+// Utilities
+@use "helpers/helpers";
 
+// Tailwind
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
