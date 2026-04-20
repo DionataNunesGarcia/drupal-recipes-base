@@ -3,11 +3,8 @@ description: "Complete SEO setup: clean URLs, meta tags, redirects, XML sitemap,
 type: "Site"
 
 install:
-  # Core modules
   - path
   - path_alias
-
-  # Contrib SEO essentials
   - pathauto
   - token
   - metatag
@@ -15,27 +12,19 @@ install:
   - metatag_twitter_cards
   - redirect
   - redirect_404
-  - simple_sitemap
-
-  # Additional SEO enhancements
   - robotstxt
-  - google_analytics
   - schema_metatag
   - schema_article
   - schema_web_page
-
-  # Custom module (optional)
   - base_seo
+  # simple_sitemap deve ser instalado antes via: ddev drush en simple_sitemap -y
 
 config:
   actions:
-    #
     # ========================================================
     # PATHAUTO: URL PATTERN CONFIGURATIONS
     # ========================================================
-    #
 
-    # Default content pattern
     pathauto.pattern.content:
       createIfNotExists:
         id: content
@@ -49,7 +38,6 @@ config:
             bundles: []
             negate: false
 
-    # Blog specific pattern
     pathauto.pattern.blog:
       createIfNotExists:
         id: blog
@@ -64,7 +52,6 @@ config:
               - article
             negate: false
 
-    # Page pattern (clean URLs)
     pathauto.pattern.page:
       createIfNotExists:
         id: page
@@ -79,7 +66,6 @@ config:
               - page
             negate: false
 
-    # Taxonomy term pattern
     pathauto.pattern.taxonomy_term:
       createIfNotExists:
         id: taxonomy_term
@@ -89,7 +75,6 @@ config:
         weight: -5
         status: true
 
-    # User pattern
     pathauto.pattern.user:
       createIfNotExists:
         id: user
@@ -99,11 +84,10 @@ config:
         weight: -5
         status: true
 
-    #
     # ========================================================
     # PATHAUTO: GENERAL SETTINGS
     # ========================================================
-    #
+
     pathauto.settings:
       simple_config_update:
         enabled_entity_types:
@@ -116,48 +100,42 @@ config:
         max_component_length: 100
         transliterate: true
         reduce_ascii: true
-        case: true # Convert to lowercase
-        update_action: 2 # Create redirect
+        case: true
+        update_action: 2
 
-    #
     # ========================================================
-    # METATAG: GLOBAL DEFAULT META TAGS
+    # METATAG: GLOBAL
     # ========================================================
-    #
+
     metatag.metatag_defaults.global:
-      simple_config_update:
+      createIfNotExists:
+        id: global
+        label: "Global"
         tags:
           title: "[current-page:title] | [site:name]"
           description: "[current-page:summary]"
           canonical_url: "[current-page:url]"
-
-          # Open Graph
           og_site_name: "[site:name]"
           og_type: "website"
           og_title: "[current-page:title]"
           og_description: "[current-page:summary]"
           og_url: "[current-page:url]"
-          og_image: "[site:logo]"
-
-          # Twitter Cards
           twitter_cards_type: "summary"
           twitter_cards_title: "[current-page:title]"
           twitter_cards_description: "[current-page:summary]"
-          twitter_cards_image: "[site:logo]"
 
-    #
     # ========================================================
-    # METATAG: NODE (CONTENT) DEFAULTS
+    # METATAG: NODE
     # ========================================================
-    #
+
     metatag.metatag_defaults.node:
-      simple_config_update:
+      createIfNotExists:
+        id: node
+        label: "Content"
         tags:
           title: "[node:title] | [site:name]"
           description: "[node:summary]"
           canonical_url: "[node:url]"
-
-          # Open Graph
           og_title: "[node:title]"
           og_description: "[node:summary]"
           og_url: "[node:url]"
@@ -165,17 +143,14 @@ config:
           article_published_time: "[node:created:html_datetime]"
           article_modified_time: "[node:changed:html_datetime]"
           article_author: "[node:author:display-name]"
-
-          # Twitter Cards
           twitter_cards_type: "summary_large_image"
           twitter_cards_title: "[node:title]"
           twitter_cards_description: "[node:summary]"
 
-    #
     # ========================================================
-    # METATAG: TAXONOMY TERM DEFAULTS
+    # METATAG: TAXONOMY TERM
     # ========================================================
-    #
+
     metatag.metatag_defaults.taxonomy_term:
       createIfNotExists:
         id: taxonomy_term
@@ -185,11 +160,10 @@ config:
           description: "[term:description]"
           canonical_url: "[term:url]"
 
-    #
     # ========================================================
-    # METATAG: USER DEFAULTS
+    # METATAG: USER
     # ========================================================
-    #
+
     metatag.metatag_defaults.user:
       createIfNotExists:
         id: user
@@ -200,43 +174,27 @@ config:
           canonical_url: "[user:url]"
           robots: "noindex, follow"
 
-    #
     # ========================================================
-    # METATAG: FRONT PAGE DEFAULTS
+    # METATAG: FRONT PAGE
     # ========================================================
-    #
+
     metatag.metatag_defaults.front:
-      simple_config_update:
+      createIfNotExists:
+        id: front
+        label: "Front page"
         tags:
           title: "[site:name] | [site:slogan]"
           description: "[site:slogan]"
           canonical_url: "[site:url]"
-
           og_title: "[site:name]"
           og_description: "[site:slogan]"
           og_url: "[site:url]"
           og_image: "[site:logo]"
 
-    #
     # ========================================================
-    # SIMPLE SITEMAP: GENERAL SETTINGS
+    # REDIRECT SETTINGS
     # ========================================================
-    #
-    simple_sitemap.settings:
-      simple_config_update:
-        max_links: 2000
-        cron_generate: true
-        cron_generate_interval: 1 # Generate daily
-        remove_duplicates: true
-        skip_untranslated: false
-        base_url: ""
-        default_variant: "default"
 
-    #
-    # ========================================================
-    # REDIRECT: 404 SETTINGS
-    # ========================================================
-    #
     redirect.settings:
       simple_config_update:
         auto_redirect: true
@@ -247,11 +205,10 @@ config:
         normalize_aliases: true
         access_check: true
 
-    #
     # ========================================================
-    # ROBOTS.TXT: CONFIGURATION
+    # ROBOTS.TXT
     # ========================================================
-    #
+
     robotstxt.settings:
       simple_config_update:
         content: |
@@ -273,14 +230,6 @@ config:
           # Files
           Disallow: /README.txt
           Disallow: /web.config
-
-          # Paths (clean URLs)
-          Disallow: /admin/
-          Disallow: /comment/
-          Disallow: /filter/
-          Disallow: /node/add/
-          Disallow: /search/
-          Disallow: /user/
 
           # Sitemap
           Sitemap: [site:url]sitemap.xml
