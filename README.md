@@ -10,6 +10,29 @@ This repository provides a clean and scalable foundation to quickly bootstrap ne
 
 ---
 
+## 🤔 Why Recipes?
+
+Drupal Recipes (introduced in Drupal 10.3) allow you to:
+
+- ✅ Package reusable functionality as composable units
+- ✅ Standardize project setup across teams
+- ✅ Reduce repetitive configuration work
+- ✅ Apply best practices consistently
+- ✅ Speed up project initialization
+
+Read more: [Drupal Recipes Documentation](https://www.drupal.org/docs/extending-drupal/drupal-recipes)
+
+## 🌍 Real-World Usage
+
+This recipe system was used to build:
+
+- 🏥 Healthcare portal (PT-BR only)
+- 🎓 Educational platform (Multilingual: PT-BR + ES + EN)
+- 🏢 Corporate website (ES only)
+
+All projects shared 80% of the base configuration, with only
+content-specific customizations needed.
+
 ## 🚀 Project Goals
 
 - Provide a **minimal and clean Drupal installation**
