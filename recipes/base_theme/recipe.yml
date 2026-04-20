@@ -1,0 +1,13 @@
+name: "Base Theme"
+description: "Scaffolds the custom frontend theme with Tailwind CSS"
+type: "Site"
+
+install:
+  - twig_tweak
+  - base_theme
+
+config:
+  actions:
+    system.theme:
+      simple_config_update:
+        default: front_theme
