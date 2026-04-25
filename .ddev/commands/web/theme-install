@@ -1,3 +1,13 @@
 #!/bin/bash
-cd web/themes/custom/front_theme
+
+# Load CUSTOM_THEME_NAME from .env
+if [ -f .env ]; then
+  export $(grep CUSTOM_THEME_NAME .env | xargs)
+fi
+CUSTOM_THEME_NAME=${CUSTOM_THEME_NAME:-front_theme}
+
+# First run theme setup script
+./scripts/theme-manager.sh setup
+
+cd web/themes/custom/$CUSTOM_THEME_NAME
 npm install
