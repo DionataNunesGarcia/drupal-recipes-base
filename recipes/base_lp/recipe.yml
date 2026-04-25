@@ -1,0 +1,27 @@
+name: 'Base Landing Page'
+description: 'Cria o tipo de conteúdo Landing Page com as seções de parágrafos base do projeto.'
+type: 'Content'
+install:
+  - paragraphs
+  - entity_reference_revisions
+  - media
+  - taxonomy
+  - webform
+  - link
+  - iconify_field
+  - metatag
+  - responsive_image
+  - image
+  - options
+  - text
+  - node
+config:
+  import:
+    paragraphs:
+      - paragraphs.settings
+    media:
+      - media.settings
+    taxonomy:
+      - taxonomy.settings
+    node:
+      - node.settings
