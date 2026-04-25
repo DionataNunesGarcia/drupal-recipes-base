@@ -10,4 +10,4 @@ config:
   actions:
     system.theme:
       simple_config_update:
-        default: front_theme
+        default: front_theme # Este valor pode ser sobrescrito pelo comando ddev theme-install usando .env
