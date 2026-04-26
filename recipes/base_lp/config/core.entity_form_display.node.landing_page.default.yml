@@ -2,9 +2,9 @@ langcode: pt-br
 status: true
 dependencies:
   config:
-    - field.field.node.page.field_meta_tag
-    - field.field.node.page.field_sections
-    - node.type.page
+    - field.field.node.landing_page.field_meta_tag
+    - field.field.node.landing_page.field_sections
+    - node.type.landing_page
   module:
     - metatag
     - paragraphs

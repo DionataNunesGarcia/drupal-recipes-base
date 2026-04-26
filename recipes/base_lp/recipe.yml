@@ -5,12 +5,14 @@ install:
   - paragraphs
   - entity_reference_revisions
   - media
+  - media_library
   - taxonomy
   - webform
   - link
   - iconify_field
   - metatag
   - pathauto
+  - path
   - token
   - responsive_image
   - image
@@ -28,17 +30,4 @@ config:
     node:
       - node.settings
 
-  actions:
-    pathauto.pattern.landing_page:
-      createIfNotExists:
-        id: landing_page
-        label: "Landing Page"
-        type: "canonical_entities:node"
-        pattern: "/[node:title]"
-        weight: -10
-        status: true
-        relationships:
-          "canonical_entities:node":
-            bundles:
-              - landing_page
-            negate: false
+  actions: { }

@@ -3,9 +3,9 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
-    - field.field.node.page.field_meta_tag
-    - field.field.node.page.field_sections
-    - node.type.page
+    - field.field.node.landing_page.field_meta_tag
+    - field.field.node.landing_page.field_sections
+    - node.type.landing_page
   module:
     - user
 id: node.landing_page.teaser
