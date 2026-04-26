@@ -1,0 +1,10 @@
+--- a/src/Entity/PathautoPattern.php
++++ b/src/Entity/PathautoPattern.php
+@@ -2,6 +2,7 @@
+ 
+ namespace Drupal\pathauto\Entity;
+ 
++use Drupal\ctools\ContextNotFoundException;
+ use Drupal\Component\Plugin\Exception\ContextException;
+ use Drupal\Core\Condition\ConditionPluginCollection;
+ use Drupal\Core\Config\Entity\ConfigEntityBase;

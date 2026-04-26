@@ -68,6 +68,9 @@
             },
             "drupal/iconify_field": {
                 "Fix division by zero in IconResolver": "assets/patches/iconify-field-division-by-zero.patch"
+            },
+            "drupal/pathauto": {
+                "Fix ContextNotFoundException not found": "assets/patches/pathauto-context-exception-fix.patch"
             }
         },
         "drupal-scaffold": {

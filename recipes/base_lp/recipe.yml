@@ -10,6 +10,8 @@ install:
   - link
   - iconify_field
   - metatag
+  - pathauto
+  - token
   - responsive_image
   - image
   - options
@@ -25,3 +27,18 @@ config:
       - taxonomy.settings
     node:
       - node.settings
+
+  actions:
+    pathauto.pattern.landing_page:
+      createIfNotExists:
+        id: landing_page
+        label: "Landing Page"
+        type: "canonical_entities:node"
+        pattern: "/[node:title]"
+        weight: -10
+        status: true
+        relationships:
+          "canonical_entities:node":
+            bundles:
+              - landing_page
+            negate: false
