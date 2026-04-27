@@ -1,10 +1,10 @@
---- a/src/Entity/PathautoPattern.php
-+++ b/src/Entity/PathautoPattern.php
-@@ -2,6 +2,7 @@
- 
- namespace Drupal\pathauto\Entity;
- 
-+use Drupal\ctools\ContextNotFoundException;
- use Drupal\Component\Plugin\Exception\ContextException;
- use Drupal\Core\Condition\ConditionPluginCollection;
- use Drupal\Core\Config\Entity\ConfigEntityBase;
+--- src/Entity/PathautoPattern.php
++++ src/Entity/PathautoPattern.php
+@@ -429,7 +429,7 @@
+         return $this->getContextFromProperty($property_path, $contexts[$base]);
+       }
+       // @todo improve this exception message.
+-      throw new ContextNotFoundException("The requested context was not found in the supplied array of contexts.");
++      throw new \Drupal\Component\Plugin\Exception\ContextException("The requested context was not found in the supplied array of contexts.");
+     }
+   }
