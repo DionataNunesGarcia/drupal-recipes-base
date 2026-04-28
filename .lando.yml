@@ -1,0 +1,85 @@
+name: drupal-recipes-base
+recipe: drupal11
+
+config:
+  php: '8.4'
+  webroot: web
+  database: postgres:18
+
+services:
+  database:
+    type: postgres:18
+    persist: true
+
+tooling:
+  drush:
+    service: appserver
+    cmd: /var/www/html/vendor/bin/drush
+
+  ai:
+    service: appserver
+    cmd: /app/scripts/ai.sh
+
+  theme-install:
+    service: appserver
+    cmd: |
+      CUSTOM_THEME_NAME=${CUSTOM_THEME_NAME:-front_theme}
+      cd "web/themes/custom/$CUSTOM_THEME_NAME" && npm install
+
+  theme-dev:
+    service: appserver
+    cmd: |
+      CUSTOM_THEME_NAME=${CUSTOM_THEME_NAME:-front_theme}
+      cd "web/themes/custom/$CUSTOM_THEME_NAME" && npm run dev
+
+  theme-build:
+    service: appserver
+    cmd: |
+      CUSTOM_THEME_NAME=${CUSTOM_THEME_NAME:-front_theme}
+      cd "web/themes/custom/$CUSTOM_THEME_NAME" && npm run build
+
+  theme-watch:
+    service: appserver
+    cmd: |
+      CUSTOM_THEME_NAME=${CUSTOM_THEME_NAME:-front_theme}
+      cd "web/themes/custom/$CUSTOM_THEME_NAME" && npm run watch
+
+  local-update:
+    service: appserver
+    cmd: |
+      #!/bin/bash
+      set -e
+      
+      echo "⚡ Running local update..."
+      
+      echo "📦 Installing dependencies..."
+      composer install
+      
+      echo "🔄 Running database updates..."
+      drush updb -y
+      
+      echo "📥 Importing configuration..."
+      drush cim -y
+      
+      echo "🎨 Building frontend..."
+      CUSTOM_THEME_NAME=${CUSTOM_THEME_NAME:-front_theme}
+      cd "web/themes/custom/$CUSTOM_THEME_NAME"
+      npm install
+      npm run build
+      cd ../../
+      
+      echo "🧹 Clearing cache..."
+      drush cr
+      
+      echo "🔗 Creating login link..."
+      drush uli
+      
+      echo "✅ Update complete!"
+
+events:
+  post-start:
+    - appserver: cd web/themes/custom/${CUSTOM_THEME_NAME:-front_theme} && npm install
+
+proxy:
+  appserver:
+    - drupal-recipes-base.lando

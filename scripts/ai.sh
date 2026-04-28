@@ -1,6 +1,6 @@
 #!/bin/bash
 # AI Development Helper Scripts
-# Place in scripts/ai.sh or use directly
+# Works with both DDEV and Lando
 
 # Colors
 RED='\033[0;31m'
@@ -9,18 +9,38 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-# Project root (assumes script is in project root)
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Detect environment
+detect_env() {
+    if command -v lando &> /dev/null && [ -n "$LANDO" ]; then
+        echo "lando"
+    elif command -v ddev &> /dev/null && [ -n "$DDEV" ]; then
+        echo "ddev"
+    else
+        echo "direct"
+    fi
+}
+
+# Get project root
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 log_info() { echo -e "${GREEN}[INFO]${NC} $1"; }
 log_warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 
+# Run drush (works in both DDEV and Lando)
+run_drush() {
+    cd "$PROJECT_ROOT"
+    if [ -f "vendor/bin/drush" ]; then
+        vendor/bin/drush "$@"
+    else
+        drush "$@"
+    fi
+}
+
 # Check DDEV
 check_ddev() {
     if ! command -v ddev &> /dev/null; then
         log_error "DDEV not found. Install from https://ddev.com"
-        exit 1
     fi
 }
 
@@ -28,7 +48,7 @@ check_ddev() {
 ai_generate_module() {
     local NAME="$1"
     if [ -z "$NAME" ]; then
-        echo "Usage: $0 generate-module <module_name>"
+        echo "Usage: $0 new-module <module_name>"
         exit 1
     fi
     
@@ -52,7 +72,7 @@ EOF
     touch "$PROJECT_ROOT/web/modules/custom/$NAME/${NAME}.services.yml"
     
     log_info "Module created: web/modules/custom/$NAME/"
-    log_info "Run: ddev drush en $NAME"
+    log_info "Run: drush en $NAME"
 }
 
 # Debug project
@@ -61,20 +81,19 @@ ai_debug() {
     echo ""
     
     echo "=== Cache ==="
-    cd "$PROJECT_ROOT"
-    ddev drush cr
+    run_drush cr
     echo ""
     
     echo "=== Routes (top 20) ==="
-    ddev drush core:route | head -20
+    run_drush core:route 2>/dev/null | head -20
     echo ""
     
     echo "=== Enabled Modules ==="
-    ddev drush pm:list --status=enabled | grep -E "^  .*AI" | head -10
+    run_drush pm:list --status=enabled 2>/dev/null | grep -E "^  .*AI" | head -10
     echo ""
     
     echo "=== Database Status ==="
-    ddev drush core:status | grep -i "db"
+    run_drush core:status 2>/dev/null | grep -i "db"
     echo ""
     
     log_info "Debug complete!"
@@ -86,13 +105,17 @@ ai_test() {
     
     cd "$PROJECT_ROOT"
     
-    if ddev drush ai:chat "Say 'AI is working!' in exactly 3 words" --provider=openai 2>/dev/null; then
+    if run_drush ai:chat "Say 'AI is working!' in exactly 3 words" --provider=openai 2>/dev/null; then
         log_info "OpenAI working!"
-    elif ddev drush ai:chat "Say 'AI is working!' in exactly 3 words" --provider=ollama 2>/dev/null; then
+    elif run_drush ai:chat "Say 'AI is working!' in exactly 3 words" --provider=ollama 2>/dev/null; then
         log_info "Ollama working!"
+    elif command -v ddev &> /dev/null && ddev describe &>/dev/null 2>&1; then
+        ddev drush ai:chat "Say 'AI is working!'" 2>/dev/null || \
+        log_error "No AI provider configured"
+        log_info "Run: drush config-set ai.settings default_provider openai"
     else
         log_error "No AI provider configured"
-        log_info "Run: ddev drush config-set ai.settings default_provider openai"
+        log_info "Run: drush config-set ai.settings default_provider openai"
     fi
 }
 
@@ -102,10 +125,20 @@ ai_install() {
     
     cd "$PROJECT_ROOT"
     
-    ddev drush recipe ../recipes/base_ai
-    ddev drush recipe ../recipes/base_ai_contents
+    if [ -d "recipes/base_ai" ]; then
+        run_drush recipe ../recipes/base_ai
+    fi
     
     log_info "AI recipes installed!"
+}
+
+# Status
+ai_status() {
+    echo "=== AI Status ==="
+    echo "Provider: $(run_drush config-get ai.settings default_provider 2>/dev/null || echo 'Not configured')"
+    echo ""
+    echo "Modules:"
+    run_drush pm:list --status=enabled 2>/dev/null | grep -E "^  .*AI" || echo "No AI modules"
 }
 
 # Show help
@@ -115,11 +148,12 @@ ai_help() {
     echo "Usage: $0 <command> [args]"
     echo ""
     echo "Commands:"
-    echo "  generate-module <name>   Create new module"
-    echo "  debug                  Debug project"
-    echo "  test                   Test AI connection"
-    echo "  install                Install AI"
-    echo "  help                   Show this help"
+    echo "  new-module <name>   Create new module"
+    echo "  debug              Debug project"
+    echo "  test               Test AI connection"
+    echo "  install            Install AI"
+    echo "  status             AI status"
+    echo "  help               Show this help"
     echo ""
 }
 
@@ -127,21 +161,21 @@ ai_help() {
 COMMAND="${1:-help}"
 
 case "$COMMAND" in
-    generate-module)
+    new-module)
         check_ddev
         ai_generate_module "$2"
         ;;
     debug)
-        check_ddev
         ai_debug
         ;;
     test)
-        check_ddev
         ai_test
         ;;
     install)
-        check_ddev
         ai_install
+        ;;
+    status)
+        ai_status
         ;;
     help|*)
         ai_help
