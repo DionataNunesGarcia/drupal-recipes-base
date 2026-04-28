@@ -33,10 +33,13 @@ config:
         pattern: "[node:content-type:name]/[node:title]"
         weight: -5
         status: true
-        relationships:
-          "canonical_entities:node":
-            bundles: []
+        selection_criteria:
+          node_type:
+            id: "entity_bundle:node"
             negate: false
+            context_mapping:
+              node: node
+            bundles: {}
 
     pathauto.pattern.blog:
       createIfNotExists:
@@ -46,25 +49,31 @@ config:
         pattern: "blog/[node:title]"
         weight: -10
         status: true
-        relationships:
-          "canonical_entities:node":
-            bundles:
-              - article
+        selection_criteria:
+          node_type:
+            id: "entity_bundle:node"
             negate: false
+            context_mapping:
+              node: node
+            bundles:
+              article: article
 
     pathauto.pattern.page:
       createIfNotExists:
         id: page
         label: "Basic Page"
         type: "canonical_entities:node"
-        pattern: "[node:title]"
+        pattern: "/[node:title]"
         weight: -8
         status: true
-        relationships:
-          "canonical_entities:node":
-            bundles:
-              - page
+        selection_criteria:
+          node_type:
+            id: "entity_bundle:node"
             negate: false
+            context_mapping:
+              node: node
+            bundles:
+              page: page
 
     pathauto.pattern.taxonomy_term:
       createIfNotExists:
@@ -74,6 +83,13 @@ config:
         pattern: "[term:vocabulary]/[term:name]"
         weight: -5
         status: true
+        selection_criteria:
+          taxonomy_vocabulary:
+            id: "entity_bundle:taxonomy_term"
+            negate: false
+            context_mapping:
+              taxonomy_term: taxonomy_term
+            bundles: {}
 
     pathauto.pattern.user:
       createIfNotExists:
@@ -83,6 +99,13 @@ config:
         pattern: "user/[user:name]"
         weight: -5
         status: true
+        selection_criteria:
+          user_role:
+            id: user_role
+            negate: false
+            context_mapping:
+              user: user
+            roles: {}
 
     # ========================================================
     # PATHAUTO: GENERAL SETTINGS
