@@ -1,217 +1,35 @@
 # Drupal Recipes Starter
 
-![Drupal](https://img.shields.io/badge/Drupal-11+-0678BE?style=for-the-badge&logo=drupal&logoColor=white)
-![PHP](https://img.shields.io/badge/PHP-8.4+-777BB4?style=for-the-badge&logo=php&logoColor=white)
-![DDEV](https://img.shields.io/badge/DDEV-Ready-00ADD8?style=for-the-badge)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791?style=for-the-badge&logo=postgresql&logoColor=white)
-
-A modular Drupal starter project built with **DDEV** and **Drupal Recipes**.
-
-This repository provides a clean and scalable foundation to quickly bootstrap new Drupal projects by composing reusable recipes.
+A professional Drupal 11 starter project with AI capabilities, built on **DDEV** and **Drupal Recipes**.
 
 ---
 
-## 🤔 Why Recipes?
+## Features
 
-Drupal Recipes (introduced in Drupal 10.3) allow you to:
-
-- ✅ Package reusable functionality as composable units
-- ✅ Standardize project setup across teams
-- ✅ Reduce repetitive configuration work
-- ✅ Apply best practices consistently
-- ✅ Speed up project initialization
-
-Read more: [Drupal Recipes Documentation](https://www.drupal.org/docs/extending-drupal/drupal-recipes)
-
-## 🌍 Real-World Usage
-
-This recipe system was used to build:
-
-- 🏥 Healthcare portal (PT-BR only)
-- 🎓 Educational platform (Multilingual: PT-BR + ES + EN)
-- 🏢 Corporate website (ES only)
-
-All projects shared 80% of the base configuration, with only
-content-specific customizations needed.
-
-## 🚀 Project Goals
-
-- Provide a **minimal and clean Drupal installation**
-- Enable **modular architecture using Recipes**
-- Standardize common features across projects
-- Improve development speed and consistency
+- **Drupal 11** with PHP 8.4
+- **PostgreSQL 18** database
+- **DDEV** for local development
+- **AI-Powered** (OpenAI, Ollama, Content Suggestions)
+- **Recipes** system for modular setup
 
 ---
 
-## 📄 Environment Variables
-
-Copy the `.env-example` to `.env` and adjust the variables as needed:
+## Quick Start
 
 ```bash
-cp .env-example .env
-```
-
-| Variable            | Default       | Description                                          |
-| ------------------- | ------------- | ---------------------------------------------------- |
-| `CUSTOM_THEME_NAME` | `front_theme` | Name of the custom theme directory and machine name. |
-
----
-
-## 🧱 Architecture
-
-The project is organized around reusable **Drupal Recipes**, each responsible for a specific concern:
-
-```
-recipes/
-  base_core/
-  base_admin/
-  base_i18n/
-  base_pt_br/
-  base_es/
-  base_seo/
-  base_theme/
-  base_lp/
-  base_finish/
-```
-
-### Recipe Overview
-
-| Recipe        | Responsibility                                              |
-| ------------- | ----------------------------------------------------------- |
-| `base_core`   | Core Drupal setup (content, media, views, etc.)             |
-| `base_admin`  | Admin UI and developer experience (Gin, toolbar)            |
-| `base_i18n`   | Multilingual infrastructure (language, locale, translation) |
-| `base_pt_br`  | PT-BR as the only language, removes others                  |
-| `base_es`     | Spanish as the only language, removes others                |
-| `base_seo`    | SEO tools (metatag, sitemap, redirects, robots.txt)         |
-| `base_theme`  | Scaffolds custom frontend theme with Tailwind CSS           |
-| `base_lp`     | Landing pages (paragraphs, structured content)              |
-| `base_finish` | Final production features (cookies, security, etc.)         |
-| **`base_ai`** | AI Core (OpenAI, Ollama providers)                      |
-| **`base_ai_contents`** | Content AI (suggestions, translation)           |
-| **`base_ai_search`** | Semantic search (embeddings, RAG, PostgreSQL)   |
-
----
-
-## 🗄️ Database
-
-This project uses **PostgreSQL 18** as the default database.
-
-### Changing Database Type
-
-To use MySQL or MariaDB instead:
-
-#### To MariaDB 11.8
-
-```bash
-ddev stop
-ddev config --database=mariadb:11.8
-ddev start
-ddev drush site:install standard --account-pass=admin --site-name="Drupal Base" -y
-```
-
-#### To MySQL 8.4
-
-```bash
-ddev stop
-ddev config --database=mysql:8.4
-ddev start
-ddev drush site:install standard --account-pass=admin --site-name="Drupal Base" -y
-```
-
-#### Back to PostgreSQL 18
-
-```bash
-ddev stop
-ddev config --database=postgres:18
-ddev start
-ddev drush site:install standard --account-pass=admin --site-name="Drupal Base" -y
-```
-
----
-
-## ⚙️ Requirements
-
-- Docker
-- DDEV
-- PHP 8.4+
-- Composer
-- Node.js 18+
-
----
-
-## 🛠️ Setup
-
-### 1. Clone the repository
-
-```bash
-git clone <your-repo-url>
+# Clone and start
+git clone <repo-url>
 cd <project-folder>
-```
-
-### 2. Start DDEV
-
-```bash
 ddev start
-```
 
-### 3. Install dependencies
-
-```bash
+# Install
 ddev composer install
-```
-
----
-
-## 🚀 Fresh Install
-
-### PT-BR only
-
-```bash
-ddev drush sql-drop -y
 ddev drush si standard -y
-ddev drush recipe ../recipes/base_admin
-ddev drush recipe ../recipes/base_i18n
-ddev drush recipe ../recipes/base_pt_br
-ddev drush recipe ../recipes/base_seo
-ddev drush locale-update
-ddev drush recipe ../recipes/base_theme
-ddev drush recipe ../recipes/base_lp
-ddev drush recipe ../recipes/base_ai
-ddev theme-install
-ddev theme-build
-ddev drush cr
-ddev drush uli
-```
 
-### ES only
-
-```bash
-ddev drush sql-drop -y
-ddev drush si standard -y
-ddev drush recipe ../recipes/base_admin
-ddev drush recipe ../recipes/base_i18n
-ddev drush recipe ../recipes/base_es
-ddev drush recipe ../recipes/base_seo
-ddev drush locale-update
-ddev drush recipe ../recipes/base_theme
-ddev drush recipe ../recipes/base_lp
-ddev drush recipe ../recipes/base_ai
-ddev theme-install
-ddev theme-build
-ddev drush cr
-ddev drush uli
-```
-
-### Multilingual (PT-BR + ES + EN)
-
-```bash
-ddev drush sql-drop -y
-ddev drush si standard -y
+# Apply recipes
 ddev drush recipe ../recipes/base_admin
 ddev drush recipe ../recipes/base_i18n
 ddev drush recipe ../recipes/base_seo
-ddev drush locale-update
 ddev drush recipe ../recipes/base_theme
 ddev drush recipe ../recipes/base_lp
 ddev drush recipe ../recipes/base_ai
@@ -223,202 +41,79 @@ ddev drush uli
 
 ---
 
-## 🔁 Development Workflow
+## Available Recipes
 
-### After every `git pull` or branch change
-
-```bash
-ddev local-update
-```
-
-This command handles everything: dependency install, database updates, config import, frontend build, and cache rebuild.
-
-### Frontend development
-
-| Command              | Description                        |
-| -------------------- | ---------------------------------- |
-| `ddev theme-watch`   | Watch mode — rebuilds on file save |
-| `ddev theme-dev`     | Single dev build (no minification) |
-| `ddev theme-build`   | Production build (minified)        |
-| `ddev theme-install` | Install npm dependencies           |
-
-### Other useful commands
-
-```bash
-# Export configuration
-ddev drush cex
-
-# Rebuild cache
-ddev drush cr
-
-# Update translations
-ddev drush locale-update
-
-# Reset and reinstall from scratch
-ddev drush sql-drop -y && ddev drush si standard -y
-```
+| Recipe | Purpose |
+|--------|---------|
+| `base_admin` | Admin UI (Gin, toolbar) |
+| `base_i18n` | Multilingual setup |
+| `base_seo` | SEO (metatag, sitemap) |
+| `base_theme` | Frontend theme (Tailwind) |
+| `base_lp` | Landing pages |
+| `base_ai` | AI Core (OpenAI/Ollama) |
+| `base_ai_contents` | AI Content automation |
 
 ---
 
-## 🧩 Applying Recipes Individually
+## AI Commands
 
 ```bash
-ddev drush recipe ../recipes/base_core
-ddev drush recipe ../recipes/base_admin
-ddev drush recipe ../recipes/base_i18n
-ddev drush recipe ../recipes/base_seo
-ddev drush recipe ../recipes/base_theme
-ddev drush recipe ../recipes/base_lp
-ddev drush recipe ../recipes/base_finish
-ddev drush recipe ../recipes/base_ai
-ddev drush recipe ../recipes/base_ai_contents
-ddev drush recipe ../recipes/base_ai_search
-```
-
-> ⚠️ `simple_sitemap` must be installed before `base_seo`:
->
-> ```bash
-> ddev drush en simple_sitemap -y
-> ddev drush recipe ../recipes/base_seo
-> ```
-
----
-
-## 📦 Frontend (Theme)
-
-The custom theme is located in:
-
-```
-web/themes/custom/${CUSTOM_THEME_NAME}/
-```
-
-Default value is `web/themes/custom/front_theme/`.
-
-Stack: Tailwind CSS v3, SCSS, esbuild, PostCSS.
-
-```bash
-# Install dependencies
-ddev theme-install
-
-# Development build
-ddev theme-dev
-
-# Watch mode
-ddev theme-watch
-
-# Production build
-ddev theme-build
-```
-
----
-
-## 🔄 DDEV Custom Commands
-
-| Command              | Description                                                  |
-| -------------------- | ------------------------------------------------------------ |
-| `ddev local-update`  | Full local update: deps, db, config, build, cache, login URL |
-| `ddev theme-install` | Install npm dependencies inside the theme                    |
-| `ddev theme-build`   | Production frontend build                                    |
-| `ddev theme-dev`     | Development frontend build                                   |
-| `ddev theme-watch`   | Watch mode for frontend development                          |
-
----
-
-## 🤖 AI Recipes
-
-This project includes AI-powered features via Drupal Recipes:
-
-### base_ai
-
-Core AI setup with OpenAI and Ollama providers.
-
-```bash
-ddev drush recipe ../recipes/base_ai
-```
-
-**Modules:**
-- `drupal/ai` - AI Core
-- `drupal/ai_provider_openai` - OpenAI provider
-- `drupal/ai_provider_ollama` - Ollama provider (local)
-- `ddev ai_api_explorer` - Testing UI
-
-**Configuration:**
-- Default: OpenAI
-- Ollama: `http://host.docker.internal:11434`
-
-### base_ai_contents
-
-Content automation - suggestions and translation.
-
-```bash
-ddev drush recipe ../recipes/base_ai_contents
-```
-
-**Modules:**
-- `drupal/ai_content_suggestions` - Real-time content suggestions
-- `drupal/ai_translate` - AI-powered translation
-
-**Features:** Summaries, readability, auto-tags, tone adjustment
-
-### base_ai_search
-
-Semantic search with PostgreSQL vectors.
-
-```bash
-ddev drush recipe ../recipes/base_ai_search
-```
-
-**Modules:**
-- `drupal/ai_vdb_provider_postgres` - PostgreSQL vector database
-
-**Requires:** PostgreSQL 18+ with pgvector extension
-
-#### AI Setup
-
-```bash
-# OpenAI
-ddev drush key:save openai_api YOUR_KEY --key-provider=config
-
-# Test
+# Test AI
 ddev drush ai:chat "Hello" --provider=openai
+
+# Or use DDEV helper
+ddev ai test
+ddev ai ai-chat "Help me create a form"
+
+# Install AI
+ddev ai install
+```
+
+### DDEV AI Commands
+
+```bash
+ddev ai help                    # Show all commands
+ddev ai new-module <name>     # Create module
+ddev ai new-service <module> <name>  # Create service
+ddev ai test                 # Test AI
+ddev ai status              # AI status
+ddev ai install           # Install AI recipes
+ddev ai clear-cache        # Clear caches
 ```
 
 ---
 
-## ⚠️ Notes
+## Development
 
-- Recipes should be **independent and reusable**
-- Avoid exporting unnecessary configuration
-- Always test recipes on a **fresh Drupal install**
-- Some contributed modules may not yet fully support Drupal 11
-- `simple_sitemap` must be installed separately before `base_seo` due to entity initialization timing
-- `locale-update` requires internet access to fetch `.po` files from drrupal.org
-- AI recipes require API keys configured via Key module
+```bash
+# After git pull
+ddev local-update
 
----
-
-## 📌 Roadmap
-
-- [x] Base admin recipe (Gin theme)
-- [x] Base i18n recipe (multilingual infrastructure)
-- [x] Base SEO recipe (metatag, sitemap, redirects)
-- [x] Base theme recipe (Tailwind scaffold)
-- [x] Base AI recipe (OpenAI, Ollama)
-- [x] Base AI Contents recipe (suggestions, translation)
-- [x] Base AI Search recipe (embeddings, RAG)
-- [ ] Base paragraphs recipe
-- [ ] Base finish recipe
-- [ ] Feature recipes (blog, courses, landing pages)
-- [ ] Improve frontend tooling
+# Frontend
+ddev theme-watch    # Watch mode
+ddev theme-build  # Production build
+```
 
 ---
 
-## 🤝 Contributing
+## Environment
 
-Feel free to open issues or submit pull requests to improve the base recipes and structure.
+| Setting | Value |
+|---------|-------|
+| PHP | 8.4 |
+| Database | PostgreSQL 18 |
+| Web server | nginx-fpm |
 
 ---
 
-## 📄 License
+## Documentation
 
-MIT License
+- [AI Skills](.ai/skills/) - Code generation prompts
+- [Context](.ai/context/) - Project context for AI
+- [Recipes](recipes/) - Drupal recipes
+
+---
+
+## License
+
+MIT
