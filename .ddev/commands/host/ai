@@ -144,11 +144,44 @@ EOF
     echo "Done!"
     ;;
     
-  debug-routes)
+debug-routes)
     echo "Custom routes:"
     ddev drush core:route 2>/dev/null | grep -v "^//" | head -20
     ;;
-    
+
+  generate)
+    TYPE="${2:-module}"
+    NAME="${3:-}"
+    case "$TYPE" in
+      module)
+        ddev ai new-module "$NAME"
+        ;;
+      service)
+        MODULE="${4:-}"
+        SERVICE="${5:-}"
+        ddev ai new-service "$MODULE" "$SERVICE"
+        ;;
+      *)
+        echo "Usage: ddev ai generate <module|service> <name>"
+        ;;
+    esac
+    ;;
+
+  install)
+    echo "Installing AI recipes..."
+    ddev drush recipe ../recipes/base_ai
+    ddev drush en ai_provider_ollama
+    echo "AI recipes installed!"
+    ;;
+
+  status)
+    echo "=== AI Status ==="
+    echo "Provider: $(ddev drush config-get ai.settings default_provider 2>/dev/null || echo 'Not configured')"
+    echo ""
+    echo "Modules:"
+    ddev drush pm:list --status=enabled 2>/dev/null | grep -E "^  .*AI" || echo "No AI modules"
+    ;;
+
   list-modules)
     echo "Custom modules:"
     ls -la web/modules/custom/ 2>/dev/null || echo "No custom modules"
@@ -160,6 +193,8 @@ EOF
     echo "Usage: ddev ai <command> [args]"
     echo ""
     echo "Commands:"
+    echo "  generate module <name>      Create new module"
+    echo "  generate service <module> <service> Create service"
     echo "  new-module <name>         Create new module"
     echo "  new-controller <module> [name]  Create controller"
     echo "  new-service <module> [name]  Create service"
@@ -169,6 +204,12 @@ EOF
     echo "  clear-cache            Clear all caches"
     echo "  debug-routes          List routes"
     echo "  list-modules          List custom modules"
+    echo "  install              Install AI recipes"
+    echo "  status               AI status"
+    echo ""
+    echo "Also available:"
+    echo "  ddev ai debug         Run debug diagnostics"
+    echo "  ddev ai test        Test AI"
     echo ""
     ;;
 esac
