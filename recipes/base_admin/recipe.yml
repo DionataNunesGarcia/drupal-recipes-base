@@ -11,6 +11,8 @@ install:
   - contextual
   - shortcut
   - block
+  - media
+  - media_library
 
   # Contrib
   - admin_toolbar

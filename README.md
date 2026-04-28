@@ -1,8 +1,9 @@
 # Drupal Recipes Starter
 
-![Drupal](https://img.shields.io/badge/Drupal-10.3+-0678BE?style=for-the-badge&logo=drupal&logoColor=white)
-![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![Drupal](https://img.shields.io/badge/Drupal-11+-0678BE?style=for-the-badge&logo=drupal&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-8.4+-777BB4?style=for-the-badge&logo=php&logoColor=white)
 ![DDEV](https://img.shields.io/badge/DDEV-Ready-00ADD8?style=for-the-badge)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 
 A modular Drupal starter project built with **DDEV** and **Drupal Recipes**.
 
@@ -42,6 +43,20 @@ content-specific customizations needed.
 
 ---
 
+## 📄 Environment Variables
+
+Copy the `.env-example` to `.env` and adjust the variables as needed:
+
+```bash
+cp .env-example .env
+```
+
+| Variable            | Default       | Description                                          |
+| ------------------- | ------------- | ---------------------------------------------------- |
+| `CUSTOM_THEME_NAME` | `front_theme` | Name of the custom theme directory and machine name. |
+
+---
+
 ## 🧱 Architecture
 
 The project is organized around reusable **Drupal Recipes**, each responsible for a specific concern:
@@ -55,23 +70,60 @@ recipes/
   base_es/
   base_seo/
   base_theme/
-  base_paragraphs/
+  base_lp/
   base_finish/
 ```
 
 ### Recipe Overview
 
-| Recipe            | Responsibility                                              |
-| ----------------- | ----------------------------------------------------------- |
-| `base_core`       | Core Drupal setup (content, media, views, etc.)             |
-| `base_admin`      | Admin UI and developer experience (Gin, toolbar)            |
-| `base_i18n`       | Multilingual infrastructure (language, locale, translation) |
-| `base_pt_br`      | PT-BR as the only language, removes others                  |
-| `base_es`         | Spanish as the only language, removes others                |
-| `base_seo`        | SEO tools (metatag, sitemap, redirects, robots.txt)         |
-| `base_theme`      | Scaffolds custom frontend theme with Tailwind CSS           |
-| `base_paragraphs` | Paragraphs and structured content                           |
-| `base_finish`     | Final production features (cookies, security, etc.)         |
+| Recipe        | Responsibility                                              |
+| ------------- | ----------------------------------------------------------- |
+| `base_core`   | Core Drupal setup (content, media, views, etc.)             |
+| `base_admin`  | Admin UI and developer experience (Gin, toolbar)            |
+| `base_i18n`   | Multilingual infrastructure (language, locale, translation) |
+| `base_pt_br`  | PT-BR as the only language, removes others                  |
+| `base_es`     | Spanish as the only language, removes others                |
+| `base_seo`    | SEO tools (metatag, sitemap, redirects, robots.txt)         |
+| `base_theme`  | Scaffolds custom frontend theme with Tailwind CSS           |
+| `base_lp`     | Landing pages (paragraphs, structured content)              |
+| `base_finish` | Final production features (cookies, security, etc.)         |
+
+---
+
+## 🗄️ Database
+
+This project uses **PostgreSQL 18** as the default database.
+
+### Changing Database Type
+
+To use MySQL or MariaDB instead:
+
+#### To MariaDB 11.8
+
+```bash
+ddev stop
+ddev config --database=mariadb:11.8
+ddev start
+ddev drush site:install standard --account-pass=admin --site-name="Drupal Base" -y
+```
+
+#### To MySQL 8.4
+
+```bash
+ddev stop
+ddev config --database=mysql:8.4
+ddev start
+ddev drush site:install standard --account-pass=admin --site-name="Drupal Base" -y
+```
+
+#### Back to PostgreSQL 18
+
+```bash
+ddev stop
+ddev config --database=postgres:18
+ddev start
+ddev drush site:install standard --account-pass=admin --site-name="Drupal Base" -y
+```
 
 ---
 
@@ -79,7 +131,7 @@ recipes/
 
 - Docker
 - DDEV
-- PHP 8.3+
+- PHP 8.4+
 - Composer
 - Node.js 18+
 
@@ -119,8 +171,9 @@ ddev drush recipe ../recipes/base_admin
 ddev drush recipe ../recipes/base_i18n
 ddev drush recipe ../recipes/base_pt_br
 ddev drush recipe ../recipes/base_seo
-ddev drush locale-update --langcode=pt-br
+ddev drush locale-update
 ddev drush recipe ../recipes/base_theme
+ddev drush recipe ../recipes/base_lp
 ddev theme-install
 ddev theme-build
 ddev drush cr
@@ -136,8 +189,9 @@ ddev drush recipe ../recipes/base_admin
 ddev drush recipe ../recipes/base_i18n
 ddev drush recipe ../recipes/base_es
 ddev drush recipe ../recipes/base_seo
-ddev drush locale-update --langcode=es
+ddev drush locale-update
 ddev drush recipe ../recipes/base_theme
+ddev drush recipe ../recipes/base_lp
 ddev theme-install
 ddev theme-build
 ddev drush cr
@@ -152,9 +206,9 @@ ddev drush si standard -y
 ddev drush recipe ../recipes/base_admin
 ddev drush recipe ../recipes/base_i18n
 ddev drush recipe ../recipes/base_seo
-ddev drush locale-update --langcode=pt-br
-ddev drush locale-update --langcode=es
+ddev drush locale-update
 ddev drush recipe ../recipes/base_theme
+ddev drush recipe ../recipes/base_lp
 ddev theme-install
 ddev theme-build
 ddev drush cr
@@ -192,8 +246,7 @@ ddev drush cex
 ddev drush cr
 
 # Update translations
-ddev drush locale-update --langcode=pt-br
-ddev drush locale-update --langcode=es
+ddev drush locale-update
 
 # Reset and reinstall from scratch
 ddev drush sql-drop -y && ddev drush si standard -y
@@ -209,7 +262,7 @@ ddev drush recipe ../recipes/base_admin
 ddev drush recipe ../recipes/base_i18n
 ddev drush recipe ../recipes/base_seo
 ddev drush recipe ../recipes/base_theme
-ddev drush recipe ../recipes/base_paragraphs
+ddev drush recipe ../recipes/base_lp
 ddev drush recipe ../recipes/base_finish
 ```
 
@@ -227,8 +280,10 @@ ddev drush recipe ../recipes/base_finish
 The custom theme is located in:
 
 ```
-web/themes/custom/front_theme/
+web/themes/custom/${CUSTOM_THEME_NAME}/
 ```
+
+Default value is `web/themes/custom/front_theme/`.
 
 Stack: Tailwind CSS v3, SCSS, esbuild, PostCSS.
 
