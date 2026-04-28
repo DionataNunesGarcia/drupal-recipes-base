@@ -1,8 +1,9 @@
 # Drupal Recipes Starter
 
-![Drupal](https://img.shields.io/badge/Drupal-10.3+-0678BE?style=for-the-badge&logo=drupal&logoColor=white)
-![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![Drupal](https://img.shields.io/badge/Drupal-11+-0678BE?style=for-the-badge&logo=drupal&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-8.4+-777BB4?style=for-the-badge&logo=php&logoColor=white)
 ![DDEV](https://img.shields.io/badge/DDEV-Ready-00ADD8?style=for-the-badge)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 
 A modular Drupal starter project built with **DDEV** and **Drupal Recipes**.
 
@@ -89,11 +90,48 @@ recipes/
 
 ---
 
+## 🗄️ Database
+
+This project uses **PostgreSQL 18** as the default database.
+
+### Changing Database Type
+
+To use MySQL or MariaDB instead:
+
+#### To MariaDB 11.8
+
+```bash
+ddev stop
+ddev config --database=mariadb:11.8
+ddev start
+ddev drush site:install standard --account-pass=admin --site-name="Drupal Base" -y
+```
+
+#### To MySQL 8.4
+
+```bash
+ddev stop
+ddev config --database=mysql:8.4
+ddev start
+ddev drush site:install standard --account-pass=admin --site-name="Drupal Base" -y
+```
+
+#### Back to PostgreSQL 18
+
+```bash
+ddev stop
+ddev config --database=postgres:18
+ddev start
+ddev drush site:install standard --account-pass=admin --site-name="Drupal Base" -y
+```
+
+---
+
 ## ⚙️ Requirements
 
 - Docker
 - DDEV
-- PHP 8.3+
+- PHP 8.4+
 - Composer
 - Node.js 18+
 
