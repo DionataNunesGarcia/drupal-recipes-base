@@ -7,8 +7,15 @@ fi
 
 CUSTOM_THEME_NAME=${CUSTOM_THEME_NAME:-front_theme}
 BASE_THEME="front_theme"
-THEME_PATH="web/themes/custom/$CUSTOM_THEME_NAME"
 BASE_THEME_PATH="web/themes/custom/$BASE_THEME"
+
+# Fallback support for typoed 'fornt_theme'
+if [ ! -d "$BASE_THEME_PATH" ] && [ -d "web/themes/custom/fornt_theme" ]; then
+  BASE_THEME="fornt_theme"
+  BASE_THEME_PATH="web/themes/custom/$BASE_THEME"
+fi
+
+THEME_PATH="web/themes/custom/$CUSTOM_THEME_NAME"
 
 case "$1" in
   setup)
@@ -24,12 +31,15 @@ case "$1" in
       grep -rl "$BASE_THEME" "$THEME_PATH" | xargs sed -i "s/$BASE_THEME/$CUSTOM_THEME_NAME/g"
     fi
     
-    # Copy templates from base_lp recipe if they exist
-    if [ -d "recipes/base_lp/templates" ]; then
-      echo "Copying templates from base_lp recipe to $CUSTOM_THEME_NAME..."
-      mkdir -p "$THEME_PATH/templates"
-      cp -r recipes/base_lp/templates/* "$THEME_PATH/templates/"
-    fi
+    # Copy templates from recipes if they exist
+    RECIPES=("base_lp" "base_contents" "base_courses")
+    for RECIPE in "${RECIPES[@]}"; do
+      if [ -d "recipes/$RECIPE/templates" ]; then
+        echo "Copying templates from $RECIPE recipe to $CUSTOM_THEME_NAME..."
+        mkdir -p "$THEME_PATH/templates"
+        cp -r recipes/$RECIPE/templates/* "$THEME_PATH/templates/"
+      fi
+    done
 
     # Set as default theme in Drupal if drush is available
     if command -v drush &> /dev/null; then

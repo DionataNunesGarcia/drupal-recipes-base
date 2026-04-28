@@ -96,7 +96,9 @@
 		<div class="pt-8 border-t border-neutral-800 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-neutral-50 animate-fade-up">
 			<div>©
 				{{ "now"|date("Y") }}
-				{{ site_name }}. Todos os direitos reservados.</div>
+				{{ site_name }}.
+				{{'All rights reserved.'|t}}
+			</div>
 			<div class="flex gap-6">
 
 				{% for item in menu_footer_privacy_terms %}
