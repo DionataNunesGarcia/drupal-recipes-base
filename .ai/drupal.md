@@ -12,6 +12,51 @@ Project-specific context for AI interactions.
 
 ---
 
+## AI Configuration
+
+### Available Providers
+
+| Provider | Status | Endpoint |
+|----------|--------|----------|
+| OpenAI | Configured | API Key via Key module |
+| Ollama | Local | `http://host.docker.internal:11434` |
+| PostgreSQL VDB | Ready | pgvector extension |
+
+### Quick AI Commands
+
+```bash
+# Test AI chat
+ddev drush ai:chat "Hello" --provider=openai
+
+# Test via DDEV command
+ddev ai ai-chat "Hello"
+
+# List providers
+ddev ai ai-providers
+```
+
+---
+
+## MiniMax/OpenAI Integration
+
+When working with AI:
+
+1. **Use OpenAI for production** - More reliable, paid
+2. **Use Ollama for development** - Free, local, faster
+3. **Configure default in** `/admin/config/ai/settings`
+
+### Setting Default Provider
+
+```bash
+# OpenAI
+ddev drush config-set ai.settings default_provider openai
+
+# Ollama
+ddev drush config-set ai.settings default_provider ollama
+```
+
+---
+
 ## 🏗️ Architecture
 
 ### Recipe System
@@ -97,6 +142,29 @@ ddev drush updatedb
 
 # Apply recipe
 ddev drush recipe ../recipes/base_ai
+
+# AI Development commands
+ddev ai new-module my_module
+ddev ai new-service my_module MyService
+ddev ai ai-chat "Help me write a form"
+```
+
+---
+
+## 🔧 Daily Development Commands
+
+```bash
+# Quick module creation
+ddev ai new-module custom_features
+
+# Create service with DI
+ddev ai new-service custom_features DataService
+
+# Test AI
+ddev ai ai-test
+
+# Development workflow
+ddev ai clear-cache
 ```
 
 ---
@@ -108,3 +176,13 @@ ddev drush recipe ../recipes/base_ai
 - `/admin/config/ai/suggestions` - Content suggestions
 - `/admin/config/ai/ai-translate` - AI translation
 - `/admin/config/search/simplesitemap` - Sitemap settings
+
+---
+
+## 💡 Tips for AI-Assisted Development
+
+1. **Use skills in `.ai/skills/`** for code generation
+2. **Check `.ai/drupal.md`** for project context before prompts
+3. **Run `ddev ai ai-test`** to verify AI works
+4. **Use Ollama for free** local development
+5. **Configure OpenAI** for production
