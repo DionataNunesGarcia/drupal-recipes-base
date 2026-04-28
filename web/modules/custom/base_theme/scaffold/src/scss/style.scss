@@ -12,6 +12,9 @@
 // Utilities
 @use "helpers/helpers";
 
+// Components
+@use "components/header";
+
 // Tailwind
 @tailwind base;
 @tailwind components;
