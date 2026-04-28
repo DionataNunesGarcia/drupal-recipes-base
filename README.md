@@ -87,6 +87,9 @@ recipes/
 | `base_theme`  | Scaffolds custom frontend theme with Tailwind CSS           |
 | `base_lp`     | Landing pages (paragraphs, structured content)              |
 | `base_finish` | Final production features (cookies, security, etc.)         |
+| **`base_ai`** | AI Core (OpenAI, Ollama providers)                      |
+| **`base_ai_contents`** | Content AI (suggestions, translation)           |
+| **`base_ai_search`** | Semantic search (embeddings, RAG, PostgreSQL)   |
 
 ---
 
@@ -174,6 +177,7 @@ ddev drush recipe ../recipes/base_seo
 ddev drush locale-update
 ddev drush recipe ../recipes/base_theme
 ddev drush recipe ../recipes/base_lp
+ddev drush recipe ../recipes/base_ai
 ddev theme-install
 ddev theme-build
 ddev drush cr
@@ -192,6 +196,7 @@ ddev drush recipe ../recipes/base_seo
 ddev drush locale-update
 ddev drush recipe ../recipes/base_theme
 ddev drush recipe ../recipes/base_lp
+ddev drush recipe ../recipes/base_ai
 ddev theme-install
 ddev theme-build
 ddev drush cr
@@ -209,6 +214,7 @@ ddev drush recipe ../recipes/base_seo
 ddev drush locale-update
 ddev drush recipe ../recipes/base_theme
 ddev drush recipe ../recipes/base_lp
+ddev drush recipe ../recipes/base_ai
 ddev theme-install
 ddev theme-build
 ddev drush cr
@@ -264,6 +270,9 @@ ddev drush recipe ../recipes/base_seo
 ddev drush recipe ../recipes/base_theme
 ddev drush recipe ../recipes/base_lp
 ddev drush recipe ../recipes/base_finish
+ddev drush recipe ../recipes/base_ai
+ddev drush recipe ../recipes/base_ai_contents
+ddev drush recipe ../recipes/base_ai_search
 ```
 
 > ⚠️ `simple_sitemap` must be installed before `base_seo`:
@@ -315,6 +324,67 @@ ddev theme-build
 
 ---
 
+## 🤖 AI Recipes
+
+This project includes AI-powered features via Drupal Recipes:
+
+### base_ai
+
+Core AI setup with OpenAI and Ollama providers.
+
+```bash
+ddev drush recipe ../recipes/base_ai
+```
+
+**Modules:**
+- `drupal/ai` - AI Core
+- `drupal/ai_provider_openai` - OpenAI provider
+- `drupal/ai_provider_ollama` - Ollama provider (local)
+- `ddev ai_api_explorer` - Testing UI
+
+**Configuration:**
+- Default: OpenAI
+- Ollama: `http://host.docker.internal:11434`
+
+### base_ai_contents
+
+Content automation - suggestions and translation.
+
+```bash
+ddev drush recipe ../recipes/base_ai_contents
+```
+
+**Modules:**
+- `drupal/ai_content_suggestions` - Real-time content suggestions
+- `drupal/ai_translate` - AI-powered translation
+
+**Features:** Summaries, readability, auto-tags, tone adjustment
+
+### base_ai_search
+
+Semantic search with PostgreSQL vectors.
+
+```bash
+ddev drush recipe ../recipes/base_ai_search
+```
+
+**Modules:**
+- `drupal/ai_vdb_provider_postgres` - PostgreSQL vector database
+
+**Requires:** PostgreSQL 18+ with pgvector extension
+
+#### AI Setup
+
+```bash
+# OpenAI
+ddev drush key:save openai_api YOUR_KEY --key-provider=config
+
+# Test
+ddev drush ai:chat "Hello" --provider=openai
+```
+
+---
+
 ## ⚠️ Notes
 
 - Recipes should be **independent and reusable**
@@ -322,7 +392,8 @@ ddev theme-build
 - Always test recipes on a **fresh Drupal install**
 - Some contributed modules may not yet fully support Drupal 11
 - `simple_sitemap` must be installed separately before `base_seo` due to entity initialization timing
-- `locale-update` requires internet access to fetch `.po` files from drupal.org
+- `locale-update` requires internet access to fetch `.po` files from drrupal.org
+- AI recipes require API keys configured via Key module
 
 ---
 
@@ -332,6 +403,9 @@ ddev theme-build
 - [x] Base i18n recipe (multilingual infrastructure)
 - [x] Base SEO recipe (metatag, sitemap, redirects)
 - [x] Base theme recipe (Tailwind scaffold)
+- [x] Base AI recipe (OpenAI, Ollama)
+- [x] Base AI Contents recipe (suggestions, translation)
+- [x] Base AI Search recipe (embeddings, RAG)
 - [ ] Base paragraphs recipe
 - [ ] Base finish recipe
 - [ ] Feature recipes (blog, courses, landing pages)
