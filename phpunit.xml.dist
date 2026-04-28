@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.4/phpunit.xsd"
+         bootstrap="web/core/tests/bootstrap.php"
+         colors="true"
+         beStrictAboutOutputDuringTests="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         displayDetailsOnPhpunitDeprecations="true"
+         convertDeprecationsToExceptions="true"
+>
+  <php>
+    <env name="SIMPLETEST_BASE_URL" value="http://web"/>
+    <env name="SIMPLETEST_DB" value="pgsql://dionata:123@db:5432/db"/>
+    <env name="BROWSERTEST_OUTPUT_BASE_URL" value=""/>
+    <env name="BROWSERTEST_OUTPUT_DIRECTORY" value="/tmp/web"/>
+  </php>
+  <testsuites>
+    <testsuite name="unit">
+      <file>web/modules/*/tests/src/Unit</file>
+    </testsuite>
+    <testsuite name="kernel">
+      <file>web/modules/*/tests/src/Kernel</file>
+    </testsuite>
+    <testsuite name="functional">
+      <file>web/modules/*/tests/src/Functional</file>
+    </testsuite>
+    <testsuite name="functional-javascript">
+      <file>web/modules/*/tests/src/FunctionalJavascript</file>
+    </testsuite>
+  </testsuites>
+  <source>
+    <include>
+      <directory>web/modules/custom</directory>
+      <directory>web/themes/custom</directory>
+    </include>
+    <exclude>
+      <directory>web/modules/*/tests</directory>
+    </exclude>
+  </source>
+</phpunit>

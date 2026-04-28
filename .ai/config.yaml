@@ -1,0 +1,60 @@
+# AI Configuration for OpenCode/MiniMax
+
+## Project Context
+
+- **Drupal Version:** 11.3.8
+- **PHP Version:** 8.4
+- **Database:** PostgreSQL 18
+- **DDEV:** Enabled
+- **Package Manager:** Composer
+
+---
+
+## Code Standards
+
+- PSR-12 code style
+- Dependency injection preferred
+- Modern Drupal 10+ patterns
+- No legacy hooks when possible
+
+---
+
+## Skills Location
+
+Skills are in: `.ai/skills/`
+
+### Available Skills
+
+| File | Purpose |
+|------|---------|
+| `drupal-module.md` | Create new module |
+| `drupal-service.md` | Refactor to service |
+| `drupal-api.md` | Create REST API |
+| `drupal-debug.md` | Debug issues |
+| `drupal-event-subscriber.md` | Create event subscriber |
+| `drupal-form.md` | Create forms |
+| `drupal-plugin.md` | Create plugins |
+
+---
+
+## Context Files
+
+| File | Purpose |
+|------|---------|
+| `context/drupal.md` | Drupal project info |
+| `context/ai.md` | AI settings |
+
+---
+
+## Usage
+
+When prompting MiniMax/OpenCode:
+
+1. Include relevant skill file
+2. Reference context in `.ai/context/`
+3. Use variables like `{{module_name}}`, `{{description}}`
+
+Example:
+```
+Use the skill from .ai/skills/drupal-module.md to create a module called my_custom_feature
+```
