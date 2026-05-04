@@ -1,21 +1,21 @@
-// Tailwind import
-@use "tailwindcss/base";
-@use "tailwindcss/components";
-@use "tailwindcss/utilities";
-
-// Common styles from shared SCSS (local to theme)
+// Tokens
 @use "tokens/colors";
 @use "tokens/typography";
 @use "tokens/spacing";
 @use "tokens/effects";
 
+// Base
 @use "base/fonts";
 @use "base/reset";
 @use "base/headings";
 
-@use "components/header";
-@use "components/pager";
-@use "components/modal-search";
-@use "components/page";
-
+// Utilities
 @use "helpers/helpers";
+
+// Components
+@use "components/header";
+
+// Tailwind
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

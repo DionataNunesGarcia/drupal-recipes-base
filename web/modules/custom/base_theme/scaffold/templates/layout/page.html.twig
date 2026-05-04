@@ -3,15 +3,15 @@
   'site_logo': site_logo,
 } %}
 
-<div class="page-layout__messages">
+<div class="container mx-auto">
   {{ messages }}
 </div>
+<main id="main-content" class="bg-white text-black min-h-screen">
 
-<main id="main-content" class="page-layout__main">
-  <div class="page-layout__inner">
+  <div class="pt-0">
 
     {% if page.hero %}
-      <section class="page-layout__hero">
+      <section class="mb-16">
         {{ page.hero }}
       </section>
     {% endif %}
@@ -21,6 +21,7 @@
     </div>
 
   </div>
+
 </main>
 
 {% include '@front_theme/includes/modal-search.html.twig' %}
