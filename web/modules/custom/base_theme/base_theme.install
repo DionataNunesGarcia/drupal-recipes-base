@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install functions for base_theme.
+ * Install functions for base_theme (Tailwind CSS).
  */
 
 use Drupal\Core\File\FileSystemInterface;
@@ -11,48 +11,56 @@ use Drupal\Core\File\FileSystemInterface;
  * Implements hook_install().
  */
 function base_theme_install() {
-  $scaffold_dir = \Drupal::service('extension.list.module')
-    ->getPath('base_theme') . '/scaffold';
+  $module_path = \Drupal::service('extension.list.module')->getPath('base_theme');
+  $scaffold_dir = $module_path . '/scaffold';
 
-  $theme_dir = DRUPAL_ROOT . '/themes/custom/front_theme';
+  // Read theme name from .env (defaults to front_theme)
+  $theme_name = 'front_theme';
+  $env_file = dirname(DRUPAL_ROOT) . '/.env';
+  if (file_exists($env_file)) {
+    $env_content = file_get_contents($env_file);
+    preg_match('/CUSTOM_THEME_NAME=(.*)/', $env_content, $matches);
+    if (!empty($matches[1])) {
+      $theme_name = trim($matches[1]);
+    }
+  }
 
+  $theme_dir = DRUPAL_ROOT . '/themes/custom/' . $theme_name;
   $file_system = \Drupal::service('file_system');
 
-  // Create theme directory if it doesn't exist
+  // Scaffold the theme from the flat scaffold directory
   $file_system->prepareDirectory($theme_dir, FileSystemInterface::CREATE_DIRECTORY);
-
-  // Copy all files from scaffold to theme
   _base_theme_copy_recursive($scaffold_dir, $theme_dir, $file_system);
 
-  // Create empty dist directories needed for compilation
-  $dirs = [
-    $theme_dir . '/dist/css',
-    $theme_dir . '/dist/js',
-    $theme_dir . '/src/scss',
-    $theme_dir . '/src/js',
-  ];
-
-  foreach ($dirs as $dir) {
+  // Ensure dist directories exist for build output
+  foreach ([$theme_dir . '/dist/css', $theme_dir . '/dist/js'] as $dir) {
     $file_system->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY);
   }
 
-  // Register theme in the system
-  \Drupal::service('theme_installer')->install(['front_theme']);
+  // Rename files and replace internal references to match the chosen theme name
+  _base_theme_rename_files($theme_dir, 'front_theme', $theme_name, $file_system);
+  _base_theme_replace_in_files($theme_dir, 'front_theme', $theme_name);
 
-  // Define logo
+  // Register and activate the theme
+  \Drupal::service('theme_installer')->install([$theme_name]);
+
+  // Set custom logo
   \Drupal::configFactory()
-    ->getEditable('front_theme.settings')
-    ->set('logo.path', 'themes/custom/front_theme/src/images/logo.png')
+    ->getEditable($theme_name . '.settings')
+    ->set('logo.path', 'themes/custom/' . $theme_name . '/src/images/logo.png')
     ->set('logo.use_default', FALSE)
     ->save();
 
   \Drupal::messenger()->addStatus(
-    t('Theme front_theme scaffolded. Run "npm install && npm run build" inside web/themes/custom/front_theme.')
+    t('Tailwind theme "@theme" scaffolded. Run "npm install && npm run build" inside web/themes/custom/@theme.', [
+      '@theme' => $theme_name,
+    ])
   );
 }
 
 /**
- * Copy recursively files from $source to $destination.
+ * Copy recursively from $source to $destination.
+ * Directories are merged; existing files are not overwritten.
  */
 function _base_theme_copy_recursive(string $source, string $destination, $file_system): void {
   if (!is_dir($source)) {
@@ -61,20 +69,50 @@ function _base_theme_copy_recursive(string $source, string $destination, $file_s
 
   $file_system->prepareDirectory($destination, FileSystemInterface::CREATE_DIRECTORY);
 
-  $items = scandir($source);
-  foreach ($items as $item) {
+  foreach (scandir($source) as $item) {
     if ($item === '.' || $item === '..') {
       continue;
     }
 
-    $src_path  = $source . '/' . $item;
-    $dest_path = $destination . '/' . $item;
+    $src  = $source . '/' . $item;
+    $dest = $destination . '/' . $item;
 
-    if (is_dir($src_path)) {
-      _base_theme_copy_recursive($src_path, $dest_path, $file_system);
+    if (is_dir($src)) {
+      _base_theme_copy_recursive($src, $dest, $file_system);
     }
-    else {
-      copy($src_path, $dest_path);
+    elseif (!file_exists($dest)) {
+      copy($src, $dest);
+    }
+  }
+}
+
+/**
+ * Rename top-level files that contain the old theme name.
+ */
+function _base_theme_rename_files(string $theme_dir, string $old_name, string $new_name, $file_system): void {
+  foreach (scandir($theme_dir) as $item) {
+    if ($item === '.' || $item === '..') {
+      continue;
+    }
+
+    if (strpos($item, $old_name) !== false) {
+      rename($theme_dir . '/' . $item, $theme_dir . '/' . str_replace($old_name, $new_name, $item));
+    }
+  }
+}
+
+/**
+ * Replace theme name references inside files.
+ */
+function _base_theme_replace_in_files(string $theme_dir, string $old_name, string $new_name): void {
+  $extensions = ['yml', 'yaml', 'json', 'js', 'theme', 'scss', 'php'];
+
+  $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($theme_dir));
+
+  foreach ($iterator as $file) {
+    if ($file->isFile() && in_array($file->getExtension(), $extensions)) {
+      $content = file_get_contents($file->getPathname());
+      file_put_contents($file->getPathname(), str_replace($old_name, $new_name, $content));
     }
   }
 }
