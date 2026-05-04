@@ -192,15 +192,24 @@ while true; do
 
 	case "$th_choice" in
 		[yY][eE][sS]|[yY])
-			echo -e "${GREEN}Installing base_theme recipe...${NC}"
-			run_drush recipe ../recipes/base_theme
+			if [ "$THEME_FRAMEWORK" = "bootstrap" ]; then
+				echo -e "${GREEN}Installing base_theme_bootstrap recipe...${NC}"
+				run_drush recipe ../recipes/base_theme_bootstrap
+			else
+				echo -e "${GREEN}Installing base_theme recipe...${NC}"
+				run_drush recipe ../recipes/base_theme
+			fi
 			THEME_INSTALLED=true
 			break
 			;;
 		[nN][oO]|[nN])
 			echo -e "${YELLOW}Skipping theme generation.${NC}"
 			echo -e "${CYAN}To install later: edit CUSTOM_THEME_NAME / THEME_FRAMEWORK in .env, then run:${NC}"
-			echo -e "${YELLOW}  $CMD drush recipe ../recipes/base_theme${NC}"
+			if [ "$THEME_FRAMEWORK" = "bootstrap" ]; then
+				echo -e "${YELLOW}  $CMD drush recipe ../recipes/base_theme_bootstrap${NC}"
+			else
+				echo -e "${YELLOW}  $CMD drush recipe ../recipes/base_theme${NC}"
+			fi
 			break
 			;;
 		*)
@@ -235,6 +244,26 @@ if [ "$THEME_INSTALLED" = true ]; then
 		echo -e "${YELLOW}Build the theme manually:${NC}"
 		echo -e "${YELLOW}  cd web/themes/custom/$THEME_NAME && npm install && npm run build${NC}\n"
 	fi
+
+# Create menu links for base_menus (dependency of theme recipes)
+	echo -e "${GREEN}Creating menu links...${NC}"
+	run_drush eval "
+\$menus = ['menus-cta' => '/', 'menu-footer-about' => '/', 'menu-footer-programs' => '/', 'menu-footer-privacy-terms' => '/'];
+foreach (\$menus as \$menu => \$path) {
+  \$existing = \Drupal::entityTypeManager()->getStorage('menu_link_content')->loadByProperties(['menu_name' => \$menu, 'link' => 'internal:' . \$path]);
+  if (empty(\$existing)) {
+    \$link = \Drupal::entityTypeManager()->getStorage('menu_link_content')->create([
+      'title' => 'Home',
+      'link' => 'internal:' . \$path,
+      'menu_name' => \$menu,
+      'expanded' => false,
+      'enabled' => true,
+    ]);
+    \$link->save();
+    print 'Created link in ' . \$menu . \"\\n\";
+  }
+}
+"
 fi
 
 echo -e "${GREEN}Clearing Drupal caches...${NC}"
