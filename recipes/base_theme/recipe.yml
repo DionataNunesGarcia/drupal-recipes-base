@@ -1,6 +1,8 @@
 name: 'Base Theme'
 description: 'Scaffolds the custom frontend theme with Tailwind CSS'
 type: 'Site'
+recipes:
+  - base_menus
 
 install:
   - twig_tweak
