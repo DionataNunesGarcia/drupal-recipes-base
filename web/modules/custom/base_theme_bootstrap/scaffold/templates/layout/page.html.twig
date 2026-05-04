@@ -3,28 +3,33 @@
   'site_logo': site_logo,
 } %}
 
-<div class="page-layout__messages">
+<div class="container">
   {{ messages }}
 </div>
 
-<main id="main-content" class="page-layout__main">
-  <div class="page-layout__inner">
+<main id="main-content" class="bg-white text-dark min-vh-100">
+
+  <div class="pt-0">
 
     {% if page.hero %}
-      <section class="page-layout__hero">
+      <section class="mb-5">
         {{ page.hero }}
       </section>
     {% endif %}
 
-    <div class="content">
-      {{ page.content }}
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          {{ page.content }}
+        </div>
+      </div>
     </div>
 
   </div>
+
 </main>
 
 {% include '@front_theme/includes/modal-search.html.twig' %}
-
 {% include '@front_theme/includes/footer.html.twig' %}
 
 {% include '@front_theme/includes/page-loader.html.twig' with {

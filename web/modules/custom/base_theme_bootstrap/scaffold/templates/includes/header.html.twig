@@ -1,36 +1,37 @@
-<header class="header-main">
-	<div class="header-main__inner">
+<header class="header-main bg-white shadow-sm border-bottom sticky-top z-3">
+  <div class="container py-3 d-flex align-items-center justify-content-between">
 
-		{# Logo #}
-		<div class="header-main__logo-wrap">
-			<div class="header-main__logo-title">
-				<a href="{{ path('<front>') }}" class="header-main__logo-link">
-					<img src="{{ site_logo }}" alt="{{ site_name }} logo" class="logo">
-				</a>
-			</div>
-		</div>
+    {# Logo #}
+    <div class="d-flex align-items-center gap-3">
+      <div class="fs-4 fw-bold">
+        <a href="{{ path('<front>') }}" class="text-decoration-none text-dark">
+          <img src="{{ site_logo }}" alt="{{ site_name }} logo" class="logo" style="height: 40px;">
+        </a>
+      </div>
+    </div>
 
-		{# Hamburger Mobile #}
-		<button id="hamburger" class="header-main__hamburger">
-			<span class="header-main__hamburger-line header-main__hamburger-line--top"></span>
-			<span class="header-main__hamburger-line header-main__hamburger-line--middle"></span>
-			<span class="header-main__hamburger-line header-main__hamburger-line--bottom"></span>
-		</button>
+    {# Hamburger Mobile #}
+    <button class="navbar-toggler d-md-none ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-		{# Menu + CTA #}
-		<div id="menu" class="header-main__nav-wrap">
+    {# Menu + CTA #}
+    <div class="collapse navbar-collapse d-md-flex align-items-center" id="mainNavbar">
+      <nav class="navbar navbar-expand-md w-100">
+        <div class="container-fluid p-0">
+          <div class="d-flex flex-column flex-md-row align-items-md-center gap-3 w-100">
+            <div class="ms-md-auto">
+              {{ page.primary_menu }}
+            </div>
+          </div>
+        </div>
+      </nav>
 
-			{# Menu principal #}
-			<nav class="header-main__nav">
-				<div class="header-main__nav-inner">
-					{{ page.primary_menu }}
-				</div>
-			</nav>
+      {# CTAs #}
+      <div class="d-flex flex-column flex-md-row gap-3 mt-3 mt-md-0 ms-md-3">
+        {% include '@front_theme/includes/menus.html.twig' with {'menu': menu_cta} %}
+      </div>
+    </div>
 
-			{# CTAs #}
-			<div class="header-main__cta-wrap">
-				{% include '@front_theme/includes/menus.html.twig' with {'menu': menu_cta} %}
-			</div>
-		</div>
-	</div>
+  </div>
 </header>

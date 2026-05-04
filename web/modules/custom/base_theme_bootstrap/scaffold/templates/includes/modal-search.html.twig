@@ -1,17 +1,20 @@
-<div id="search-modal" class="modal-search">
+<div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    
+    <div class="modal-content bg-dark text-white">
 
-	<div class="modal-search__dialog">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="searchModalLabel">
+          {{ 'Search the site'|t }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
 
-		<button id="search-modal-close-btn" class="modal-search__close">
-			&times;
-		</button>
+      <div class="modal-body">
+        {{ drupal_block('search_form_block') }}
+      </div>
 
-		<h3 class="modal-search__title">
-			{{ 'Search the site'|t }}
-		</h3>
+    </div>
 
-		<div id="search-modal-content" class="modal-search__content">
-			{{ drupal_block('search_form_block') }}
-		</div>
-	</div>
+  </div>
 </div>
