@@ -1,0 +1,26 @@
+// Bootstrap customization - must be before Bootstrap import
+$primary: #0d6efd;
+$secondary: #6c757d;
+$success: #198754;
+$info: #0dcaf0;
+$warning: #ffc107;
+$danger: #dc3545;
+$light: #f8f9fa;
+$dark: #212529;
+
+// Import Bootstrap
+@use "bootstrap/scss/bootstrap";
+
+// Custom styles from common SCSS (local to theme)
+@use "tokens/colors";
+@use "tokens/typography";
+@use "tokens/spacing";
+@use "tokens/effects";
+
+@use "base/fonts";
+@use "base/reset";
+@use "base/headings";
+
+@use "components/header";
+
+@use "helpers/helpers";

@@ -1,6 +1,8 @@
-name: "Base Theme"
-description: "Scaffolds the custom frontend theme with Tailwind CSS"
-type: "Site"
+name: 'Base Theme'
+description: 'Scaffolds the custom frontend theme with Tailwind CSS'
+type: 'Site'
+recipes:
+  - base_menus
 
 install:
   - twig_tweak
@@ -10,4 +12,4 @@ config:
   actions:
     system.theme:
       simple_config_update:
-        default: front_theme # Este valor pode ser sobrescrito pelo comando ddev theme-install usando .env
+        default: front_theme # This value can be overwritten by the ddev theme-install command using .env
