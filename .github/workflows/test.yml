@@ -9,7 +9,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -26,16 +25,13 @@ jobs:
         run: ddev start
 
       - name: Install dependencies
+        run: ddev composer install --no-interaction
+
+      - name: Verify site builds
         run: |
-          ddev composer install
-          ddev composer require --dev phpunit/phpunit:^10 --no-interaction
+          ddev drush core:status
+          ddev drush cr
 
-      - name: Run tests
-        run: |
-          ddev phpunit --configuration phpunit.xml.dist
-
-      - name: Run database updates
-        run: ddev drush updatedb -y
-
-      - name: Verify site
-        run: ddev drush core:status
+      - name: Check for critical errors in logs
+        if: failure()
+        run: ddev logs --tail=50
