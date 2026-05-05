@@ -56,16 +56,6 @@ case "$1" in
     echo "Updating references in files..."
     find "$THEME_PATH" -type f \( -name "*.yml" -o -name "*.yaml" -o -name "*.json" -o -name "*.js" -o -name "*.theme" -o -name "*.scss" \) -exec sed -i "s/$BASE_THEME/$CUSTOM_THEME_NAME/g" {} \;
 
-    # Copy templates from recipes if they exist
-    RECIPES=("base_lp" "base_contents" "base_courses")
-    for RECIPE in "${RECIPES[@]}"; do
-      if [ -d "recipes/$RECIPE/templates" ]; then
-        echo "Copying templates from $RECIPE recipe to $CUSTOM_THEME_NAME..."
-        mkdir -p "$THEME_PATH/templates"
-        cp -r recipes/$RECIPE/templates/* "$THEME_PATH/templates/"
-      fi
-    done
-
     # Set as default theme in Drupal if drush is available
     if command -v drush &> /dev/null; then
       drush theme:install $CUSTOM_THEME_NAME -y
