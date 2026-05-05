@@ -13,8 +13,5 @@ jobs:
 
       - name: EditorConfig Checker
         uses: editorconfig-checker/action-editorconfig-checker@main
-
-      - name: Run editorconfig-checker
-        run: |
-          npm install -g editorconfig-checker
-          ec -exclude node_modules
+        with:
+          exclude: "vendor|node_modules|dist|web/core|web/modules/contrib|web/themes/contrib"

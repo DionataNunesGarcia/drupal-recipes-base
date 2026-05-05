@@ -24,7 +24,7 @@ function front_theme_preprocess_page(&$variables) {
 
   $menu_service = \Drupal::service('custom_menu.menu_service');
 
-  $variables['menu_main'] = $menu_service->getMenuTree('main');
+  $variables['main_menu'] = $menu_service->getMenuTree('main');
   $variables['menu_cta'] = $menu_service->getMenuTree('menus-cta');
 
   $variables['menu_footer_about'] = $menu_service->getMenuTree('menu-footer-about');

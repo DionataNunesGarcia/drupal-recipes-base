@@ -25,7 +25,7 @@
 			{# Menu principal #}
 			<nav class="flex flex-col md:flex-row md:items-center md:gap-4 w-full">
 				<div class="flex flex-col md:flex-row md:gap-2 items-start md:items-center lg:justify-end w-full">
-					{{ page.primary_menu }}
+					{% include '@front_theme/includes/main-menu.html.twig' with {'menu': menu_main} %}
 				</div>
 			</nav>
 

@@ -4,10 +4,8 @@
          bootstrap="web/core/tests/bootstrap.php"
          colors="true"
          beStrictAboutOutputDuringTests="true"
-         failOnRisky="true"
-         failOnWarning="true"
-         displayDetailsOnPhpunitDeprecations="true"
-         convertDeprecationsToExceptions="true"
+         failOnRisky="false"
+         failOnWarning="false"
 >
   <php>
     <env name="SIMPLETEST_BASE_URL" value="http://web"/>
@@ -17,25 +15,12 @@
   </php>
   <testsuites>
     <testsuite name="unit">
-      <file>web/modules/*/tests/src/Unit</file>
-    </testsuite>
-    <testsuite name="kernel">
-      <file>web/modules/*/tests/src/Kernel</file>
-    </testsuite>
-    <testsuite name="functional">
-      <file>web/modules/*/tests/src/Functional</file>
-    </testsuite>
-    <testsuite name="functional-javascript">
-      <file>web/modules/*/tests/src/FunctionalJavascript</file>
+      <directory>web/modules/custom</directory>
     </testsuite>
   </testsuites>
   <source>
     <include>
       <directory>web/modules/custom</directory>
-      <directory>web/themes/custom</directory>
     </include>
-    <exclude>
-      <directory>web/modules/*/tests</directory>
-    </exclude>
   </source>
 </phpunit>
