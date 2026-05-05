@@ -42,10 +42,49 @@ run_drush() {
 	fi
 }
 
+# ─── Helper: copy recipe templates to theme ─────────────────────────────
+copy_recipe_templates() {
+	local recipe_path=$1
+	local theme_dir=$(ls -d web/themes/custom/*/ 2>/dev/null | head -1)
+
+	if [ -z "$theme_dir" ]; then
+		echo -e "${YELLOW}No custom theme found. Skipping template copy.${NC}"
+		return
+	fi
+
+	local templates_dir="$recipe_path/templates"
+	if [ ! -d "$templates_dir" ]; then
+		return
+	fi
+
+	echo -e "${CYAN}Templates found in $recipe_path${NC}"
+	while true; do
+		read -p "Copy templates to $theme_dir? [Y/n]: " choice
+		choice=${choice:-y}
+
+		case "$choice" in
+			[yY][eE][sS]|[yY])
+				mkdir -p "$theme_dir/templates"
+				cp -r "$templates_dir"/* "$theme_dir/templates/" 2>/dev/null
+				echo -e "${GREEN}Templates copied to $theme_dir/templates/${NC}"
+				break
+				;;
+			[nN][oO]|[nN])
+				echo -e "${YELLOW}Skipping template copy.${NC}"
+				break
+				;;
+			*)
+				echo -e "${YELLOW}Please answer 'y' or 'n'.${NC}"
+				;;
+		esac
+	done
+}
+
 # ─── Helper: prompt and install a recipe ─────────────────────────────────────
 install_recipe() {
 	local recipe_path=$1
 	local description=$2
+	local copy_templates=${3:-false}
 
 	echo -e "${CYAN}Recipe: ${YELLOW}$recipe_path${NC}"
 	echo -e "Description: $description"
@@ -58,6 +97,11 @@ install_recipe() {
 			[yY][eE][sS]|[yY])
 				echo -e "${GREEN}Installing $recipe_path...${NC}"
 				run_drush recipe "$recipe_path"
+
+				if [ "$copy_templates" = "true" ]; then
+					copy_recipe_templates "$recipe_path"
+				fi
+
 				echo ""
 				break
 				;;
@@ -66,7 +110,7 @@ install_recipe() {
 				break
 				;;
 			*)
-				echo -e "${YELLOW}Please answer 'y' for yes or 'n' for no.${NC}"
+				echo -e "${YELLOW}Please answer 'y' for yes or 'n'.${NC}"
 				;;
 		esac
 	done
@@ -219,8 +263,10 @@ while true; do
 done
 echo ""
 
-# ─── Remaining recipes ────────────────────────────────────────────────────────
-install_recipe "../recipes/base_lp" "Landing pages (Content Type, views and paragraph components)"
+# ─── base_lp ───────────────────────────────────────────────────────────────
+install_recipe "../recipes/base_lp" "Landing pages (Content Type, views and paragraph components)" "true"
+install_recipe "../recipes/base_contents" "Contents (Content Type, views and paragraph components)" "true"
+install_recipe "../recipes/base_courses" "Courses (Content Type, views and paragraph components)" "true"
 install_recipe "../recipes/base_ai" "AI Core (OpenAI / Ollama integrations)"
 install_recipe "../recipes/base_ai_contents" "AI Content automation (AI-powered content generation tools)"
 
