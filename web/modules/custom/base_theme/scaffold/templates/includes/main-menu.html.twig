@@ -1,5 +1,5 @@
 <ul class="flex flex-col md:flex-row gap-0 lg:gap-4 items-start md:items-center md:justify-end">
-	{% for item in items %}
+	{% for item in menu %}
 		<li class="relative group {% if item.below %}has-dropdown{% endif %}">
 			<a href="{{ item.url }}" class="text-sm tracking-wide hover:text-neutral-600 px-2 transition-colors {{ item.in_active_trail ? 'text-gray-900' : 'text-gray-600' }}">
 				{{ item.title }}
