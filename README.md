@@ -6,7 +6,7 @@ A professional Drupal 11 starter project with AI capabilities, built on **DDEV**
 
 ## Features
 
-- **Drupal 11** with PHP 8.4
+- **Drupal 11.3.11** with PHP 8.4
 - **PostgreSQL 18** database
 - **DDEV** for local development
 - **AI-Powered** (OpenAI, Ollama, Content Suggestions)
@@ -83,6 +83,20 @@ ddev ai clear-cache        # Clear caches
 
 ---
 
+## Versions
+
+| Package | Version |
+|---------|---------|
+| Drupal Core | 11.3.11 |
+| AI | 1.4.1 |
+| AI Content Suggestions | 1.4.0 |
+| Gin Admin Theme | 5.0.15 |
+| Pathauto | 1.15.0 |
+| Webform | 6.3.0-rc1 |
+| Drush | 13.7.3 |
+
+---
+
 ## Development
 
 ```bash
@@ -100,6 +114,7 @@ ddev theme-build  # Production build
 
 | Setting | Value |
 |---------|-------|
+| Drupal | 11.3.11 |
 | PHP | 8.4 |
 | Database | PostgreSQL 18 |
 | Web server | nginx-fpm |
